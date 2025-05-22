@@ -1,7 +1,28 @@
-import React from "react";
-import { Box, Button, Typography } from "@mui/material";
-
+import React, { useEffect, useState } from "react";
+import { Box, Button, Typography, CircularProgress } from "@mui/material";
+import datos from "../testData/insertions";
+import InsertionsTable from "../components/InsertionsTable";
+import axios from "axios";
 export default function MainPage() {
+  const [insertions, setInsertions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    // Realizar la consulta a la API al cargar el componente
+    const fetchInsertions = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/insertions"
+        );
+        setInsertions(response.data.data); // Actualizar el estado con los datos de la API
+      } catch (error) {
+        console.error("Error al obtener las inserciones:", error);
+      } finally {
+        setLoading(false); // Detener el círculo de carga
+      }
+    };
+
+    fetchInsertions();
+  }, []);
   return (
     <>
       <Box
@@ -42,9 +63,23 @@ export default function MainPage() {
           Bienvenido
         </Typography>
       </Box>
-      <Button variant="outlined" color="secondary.main">
-        Peligro
-      </Button>
+      {/* Mostrar el círculo de carga o la tabla */}
+      <Box sx={{ padding: 4 }}>
+        {loading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "300px",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <InsertionsTable insertions={insertions} />
+        )}
+      </Box>
     </>
   );
 }
