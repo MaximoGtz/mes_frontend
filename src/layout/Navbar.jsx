@@ -1,26 +1,25 @@
-import * as React from "react";
+// import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import { Button } from "@mui/material";
+// import IconButton from "@mui/material/IconButton";
+// import MenuIcon from "@mui/icons-material/Menu";
+// import { Button } from "@mui/material";
 
 export default function Navbar() {
-  const isLogged = false;
   return (
     <Box>
       <AppBar position="static">
         <Toolbar variant="dense">
-          <IconButton
+          {/* <IconButton
             edge="start"
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
           {/* <img
             src="/images/images.jpg"
             alt="logo"
@@ -40,9 +39,9 @@ export default function Navbar() {
           >
             Soporte y Servicios
           </Typography>
-          <Button variant="containded" color="warning">
-            Laravell
-          </Button>
+          <Typography sx={{ marginLeft: "auto" }}>
+            Monitoreo de Perfiladoras
+          </Typography>
         </Toolbar>
       </AppBar>
     </Box>
