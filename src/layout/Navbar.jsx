@@ -25,23 +25,32 @@ export default function Navbar() {
             alt="logo"
             style={{ width: "50px", height: "50px", padding: "0px 20px" }}
           ></img> */}
-          <Typography variant="h6" color="inherit" component="div">
-            I-DEB
-          </Typography>
-          <Typography
-            variant="body2"
-            color="inherit"
-            component="div"
-            textAlign={"center"}
-            alignContent={"center"}
-            marginLeft={"5px"}
-            marginTop={"4px"}
-          >
-            Soporte y Servicios
-          </Typography>
-          <Typography sx={{ marginLeft: "auto" }}>
-            Monitoreo de Perfiladoras
-          </Typography>
+          <Box display={"flex"} justifyContent={"space-between"} width={"100%"}>
+            <Box display={"flex"}>
+              <Typography variant="h6" color="inherit" component="div">
+                I-DEB
+              </Typography>
+              <Typography
+                variant="body2"
+                color="inherit"
+                component="div"
+                textAlign={"center"}
+                alignContent={"center"}
+                marginLeft={"5px"}
+                marginTop={"4px"}
+              >
+                Soporte y Servicios
+              </Typography>
+            </Box>
+            <Box>
+              
+            </Box>
+            <Box>
+              <Typography sx={{ marginLeft: "auto" }}>
+                Monitoreo de Perfiladoras
+              </Typography>
+            </Box>
+          </Box>
         </Toolbar>
       </AppBar>
     </Box>

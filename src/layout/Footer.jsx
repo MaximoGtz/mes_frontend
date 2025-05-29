@@ -13,30 +13,30 @@ export default function Footer() {
   };
   return (
     <>
-      <Card sx={{ width: "99%", margin: "10px 10px" }}>
-        <CardContent>
-          <Box display={"flex"}>
-            <Typography variant="h5" component="div">
-              I-DEB Soporte y Servicios
-            </Typography>
-            <Button
-              variant="contained"
-              sx={{ marginLeft: "auto" }}
-              onClick={handleRedirect}
+        <Card sx={{ width: "99%", margin: "10px 10px" }}>
+          <CardContent>
+            <Box display={"flex"}>
+              <Typography variant="h5" component="div">
+                I-DEB Soporte y Servicios
+              </Typography>
+              <Button
+                variant="contained"
+                sx={{ marginLeft: "auto" }}
+                onClick={handleRedirect}
+              >
+                Ir a Página principal
+              </Button>
+            </Box>
+            <Divider sx={{ my: 2 }} />
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              textAlign={"center"}
             >
-              Ir a Página principal
-            </Button>
-          </Box>
-          <Divider sx={{ my: 2 }} />
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            textAlign={"center"}
-          >
-            © 2025 Perfiladoras - Todos los derechos reservados.
-          </Typography>
-        </CardContent>
-      </Card>
+              © 2025 Perfiladoras - Todos los derechos reservados.
+            </Typography>
+          </CardContent>
+        </Card>
     </>
   );
 }

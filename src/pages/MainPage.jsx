@@ -3,6 +3,7 @@ import { Box, Button, Typography, CircularProgress } from "@mui/material";
 import datos from "../testData/insertions";
 import InsertionsTable from "../components/InsertionsTable";
 import axios from "axios";
+import { normalEndpoint } from "../api/endpoints";
 export default function MainPage() {
   const [insertions, setInsertions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,9 +11,8 @@ export default function MainPage() {
     // Realizar la consulta a la API al cargar el componente
     const fetchInsertions = async () => {
       try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/insertions"
-        );
+        const response = await axios.get(normalEndpoint("api/insertions"));
+        console.log(response.data);
         setInsertions(response.data.data); // Actualizar el estado con los datos de la API
       } catch (error) {
         console.error("Error al obtener las inserciones:", error);
@@ -65,6 +65,14 @@ export default function MainPage() {
       </Box>
       {/* Mostrar el círculo de carga o la tabla */}
       <Box sx={{ padding: 4 }}>
+        <Typography
+          variant="h3"
+          fontWeight={600}
+          textAlign={"center"}
+          marginBottom={"32px"}
+        >
+          Todas las inserciónes
+        </Typography>
         {loading ? (
           <Box
             sx={{
