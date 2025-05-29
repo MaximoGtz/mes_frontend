@@ -25,6 +25,8 @@ const theme = createTheme({
     },
     info: {
       main: "#0288d1", // azul acero
+      dark: "#026ca4",
+      darker: "#015280",
     },
     success: {
       main: "#388e3c", // verde apagado, más sobrio

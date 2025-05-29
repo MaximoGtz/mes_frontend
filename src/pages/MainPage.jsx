@@ -13,11 +13,11 @@ export default function MainPage() {
       try {
         const response = await axios.get(normalEndpoint("api/insertions"));
         console.log(response.data);
-        setInsertions(response.data.data); // Actualizar el estado con los datos de la API
+        setInsertions(response.data.data);
       } catch (error) {
         console.error("Error al obtener las inserciones:", error);
       } finally {
-        setLoading(false); // Detener el círculo de carga
+        setLoading(false);
       }
     };
 
@@ -28,7 +28,7 @@ export default function MainPage() {
       <Box
         sx={{
           height: "100vh",
-          backgroundImage: `url('/images/perfiladora.jpg')`, // Puedes cambiar esta imagen por una tuya
+          backgroundImage: `url('/images/perfiladora.jpg')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           position: "relative",
@@ -51,7 +51,6 @@ export default function MainPage() {
           }}
         />
 
-        {/* Contenido centrado */}
         <Typography
           variant="h2"
           sx={{
@@ -63,7 +62,6 @@ export default function MainPage() {
           Bienvenido
         </Typography>
       </Box>
-      {/* Mostrar el círculo de carga o la tabla */}
       <Box sx={{ padding: 4 }}>
         <Typography
           variant="h3"

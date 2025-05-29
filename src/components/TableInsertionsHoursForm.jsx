@@ -53,7 +53,7 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
   }
 
   return (
-    <Box maxWidth={"xl"} mx="auto" margin={"0 auto"} padding={"20px 0px"}>
+    <Box mx="auto" margin={"0 auto"} padding={"20px 0px"}>
       <Typography variant="h4" gutterBottom>
         Formulario de Producción
       </Typography>
@@ -84,6 +84,8 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
                   error={touched.profiler_id && Boolean(errors.profiler_id)}
                   helperText={touched.profiler_id && errors.profiler_id}
                   margin="normal"
+                  color="warning"
+                  autoComplete="off"
                 >
                   {profilers.map((profiler) => (
                     <MenuItem key={profiler.id} value={profiler.id}>
@@ -104,13 +106,15 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
                   helperText={touched.day && errors.day}
                   margin="normal"
                   InputLabelProps={{ shrink: true }}
+                  color="warning"
+                  autoComplete="off"
                 />
               </Grid>
               <Grid size={6}>
                 <TextField
                   fullWidth
                   name="pieces_per_hour"
-                  label="Piezas por hora deseadas"
+                  label="Piezas por deseadas (por hora)"
                   value={values.pieces_per_hour}
                   onChange={handleChange}
                   error={
@@ -118,6 +122,8 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
                   }
                   helperText={touched.pieces_per_hour && errors.pieces_per_hour}
                   margin="normal"
+                  color="warning"
+                  autoComplete="off"
                 />
               </Grid>
               <Grid size={6}>
@@ -130,18 +136,22 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
                   error={touched.operator_name && Boolean(errors.operator_name)}
                   helperText={touched.operator_name && errors.operator_name}
                   margin="normal"
+                  color="warning"
+                  autoComplete="off"
                 />
               </Grid>
               <Grid size={6}>
                 <TextField
                   fullWidth
                   name="piece_length"
-                  label="Longitud de la pieza (MILIMETROS)"
+                  label="Longitud de la pieza (milímetros)"
                   value={values.piece_length}
                   onChange={handleChange}
                   error={touched.piece_length && Boolean(errors.piece_length)}
                   helperText={touched.piece_length && errors.piece_length}
                   margin="normal"
+                  color="warning"
+                  autoComplete="off"
                 />
               </Grid>
               <Grid

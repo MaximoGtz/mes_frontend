@@ -41,17 +41,27 @@ export default function TableInsertionsHours({
           <TextField
             label="Minutos"
             fullWidth
+            color="warning"
+            autoComplete="off"
             onChange={(event) => changeTableData(index, event.target.value)}
           ></TextField>
         </TableCell>
         <TableCell>
-          <TextField fullWidth disabled value={row.death_time}></TextField>
+          <TextField
+            fullWidth
+            disabled
+            autoComplete="off"
+            value={row.death_time ? `${row.death_time} minutos` : `0 minutos`}
+            color="warning"
+          ></TextField>
         </TableCell>
         <TableCell>
           <TextField
             label="Escribe tus razónes"
             fullWidth
             multiline
+            autoComplete="off"
+            color="warning"
           ></TextField>
         </TableCell>
         <TableCell>
@@ -63,7 +73,7 @@ export default function TableInsertionsHours({
     ));
   }
   return (
-    <Box maxWidth={"xl"} margin={"0 auto"}>
+    <Box margin={"0 auto"}>
       <TableContainer component={Paper}>
         <Table>
           <TableHead sx={{ backgroundColor: "chocolate" }}>

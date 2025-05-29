@@ -3,28 +3,35 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-// import IconButton from "@mui/material/IconButton";
-// import MenuIcon from "@mui/icons-material/Menu";
-// import { Button } from "@mui/material";
-
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 export default function Navbar() {
+  const navigate = useNavigate();
+
+  const handleNavigate = (page) => {
+    switch (page) {
+      case "index":
+        navigate("/");
+        break;
+      case "prod_table":
+        navigate("/tabla");
+        break;
+      case "day_data":
+        navigate("/estatus/dia");
+        break;
+      case "stats":
+        navigate("/estadisticas");
+        break;
+
+      default:
+        navigate("/");
+        break;
+    }
+  };
   return (
     <Box>
       <AppBar position="static">
         <Toolbar variant="dense">
-          {/* <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton> */}
-          {/* <img
-            src="/images/images.jpg"
-            alt="logo"
-            style={{ width: "50px", height: "50px", padding: "0px 20px" }}
-          ></img> */}
           <Box display={"flex"} justifyContent={"space-between"} width={"100%"}>
             <Box display={"flex"}>
               <Typography variant="h6" color="inherit" component="div">
@@ -42,11 +49,50 @@ export default function Navbar() {
                 Soporte y Servicios
               </Typography>
             </Box>
-            <Box>
-              
+            <Box display={"flex"} width={"60%"} justifyContent={"space-around"}>
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{ margin: "0px 10px" }}
+                onClick={() => {
+                  handleNavigate("index");
+                }}
+              >
+                Inicio
+              </Button>
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{ margin: "0px 10px" }}
+                onClick={() => {
+                  handleNavigate("prod_table");
+                }}
+              >
+                Tabla de producción
+              </Button>
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{ margin: "0px 10px" }}
+                onClick={() => {
+                  handleNavigate("day_data");
+                }}
+              >
+                Datos del día
+              </Button>
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{ margin: "0px 10px" }}
+                onClick={() => {
+                  handleNavigate("stats");
+                }}
+              >
+                Estadísticas
+              </Button>
             </Box>
             <Box>
-              <Typography sx={{ marginLeft: "auto" }}>
+              <Typography sx={{ marginLeft: "auto" }} textAlign={"center"}>
                 Monitoreo de Perfiladoras
               </Typography>
             </Box>

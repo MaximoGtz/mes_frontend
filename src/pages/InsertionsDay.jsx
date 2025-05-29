@@ -1,25 +1,19 @@
-import { Box, Card, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import TableInsertionsHours from "../components/TableInsertionsHours";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { normalEndpoint } from "../api/endpoints";
 import axios from "axios";
+import TableDayTotal from "../components/TableDayTotal";
 import TableInsertionsHoursForm from "../components/TableInsertionsHoursForm";
 export default function InsertionsTableDay() {
-  // const [formFields, setFormFields] = useState({});
   const [tableLoading, setTableLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
-  // useEffect(() => {
-  //   console.log(formFields);
-  //   fetchTableData(formFields);
-  // }, [formFields]);
+  const [totalTableData, setTotalTableData] = useState([]);
   const changeTableData = (index, minutesWorked) => {
     let death_time = Math.abs(minutesWorked - 60);
     console.log(death_time);
-
-    // Clona el array y el objeto a modificar
     const newTableData = [...tableData];
     newTableData[index] = { ...newTableData[index], death_time };
-
     console.log(newTableData[index]);
     setTableData(newTableData);
   };
@@ -28,7 +22,7 @@ export default function InsertionsTableDay() {
     day,
     piece_length,
     pieces_per_hour,
-    operator_name,
+    // operator_name,
   }) => {
     setTableLoading(true);
     await axios
@@ -39,13 +33,20 @@ export default function InsertionsTableDay() {
         },
       })
       .then((response) => {
-        console.log(response.data);
         const nuevaData = response.data.map((datos) => ({
           ...datos,
           meters_per_hour: ((piece_length / 1000) * datos.count).toFixed(2),
         }));
         setTableData(nuevaData);
         setTableLoading(false);
+        const total_expected = nuevaData.reduce(
+          (acc, item) => acc + item.count,
+          0
+        );
+
+        const result = { total_expected };
+        console.log(result);
+        setTotalTableData(result);
       })
       .catch((error) => {
         console.error(error);
@@ -53,22 +54,25 @@ export default function InsertionsTableDay() {
   };
   return (
     <Box width={"100%"}>
-      <Typography
-        variant="h3"
-        sx={{ margin: "20px 0px" }}
-        textAlign={"center"}
-        fontWeight={600}
-      >
-        Producción por día
-      </Typography>
-      <TableInsertionsHoursForm
-        fetchTableData={fetchTableData}
-      ></TableInsertionsHoursForm>
-      <TableInsertionsHours
-        data={tableData}
-        tableLoading={tableLoading}
-        changeTableData={changeTableData}
-      ></TableInsertionsHours>
+      <Box padding={"20px"} maxWidth={"xl"} margin={"0 auto "}>
+        <Typography
+          variant="h3"
+          sx={{ margin: "20px 0px" }}
+          textAlign={"center"}
+          fontWeight={600}
+        >
+          Producción por día
+        </Typography>
+        <TableInsertionsHoursForm
+          fetchTableData={fetchTableData}
+        ></TableInsertionsHoursForm>
+        <TableInsertionsHours
+          data={tableData}
+          tableLoading={tableLoading}
+          changeTableData={changeTableData}
+        ></TableInsertionsHours>
+        <TableDayTotal data={totalTableData} />
+      </Box>
     </Box>
   );
 }
