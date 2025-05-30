@@ -11,10 +11,8 @@ export default function InsertionsTableDay() {
   const [totalTableData, setTotalTableData] = useState([]);
   const changeTableData = (index, minutesWorked) => {
     let death_time = Math.abs(minutesWorked - 60);
-    console.log(death_time);
     const newTableData = [...tableData];
     newTableData[index] = { ...newTableData[index], death_time };
-    console.log(newTableData[index]);
     setTableData(newTableData);
   };
   const fetchTableData = async ({
@@ -22,7 +20,6 @@ export default function InsertionsTableDay() {
     day,
     piece_length,
     pieces_per_hour,
-    // operator_name,
   }) => {
     setTableLoading(true);
     await axios
@@ -36,15 +33,35 @@ export default function InsertionsTableDay() {
         const nuevaData = response.data.map((datos) => ({
           ...datos,
           meters_per_hour: ((piece_length / 1000) * datos.count).toFixed(2),
+          status: datos.count >= pieces_per_hour ? "positive" : "negative",
         }));
+        console.log(nuevaData);
         setTableData(nuevaData);
         setTableLoading(false);
-        const total_expected = nuevaData.reduce(
+        const real_pieces = nuevaData.reduce(
           (acc, item) => acc + item.count,
           0
         );
-
-        const result = { total_expected };
+        const total_pieces = pieces_per_hour * 12;
+        const difference_pieces = real_pieces - total_pieces;
+        let status_production;
+        let real_meters = ((piece_length / 1000) * real_pieces).toFixed(2);
+        let total_meters = ((piece_length / 1000) * total_pieces).toFixed(2);
+        let difference_meters = (real_meters - total_meters).toFixed(2);
+        if (difference_pieces < 0) {
+          status_production = "negative";
+        } else {
+          status_production = "positive";
+        }
+        const result = {
+          real_pieces,
+          total_pieces,
+          difference_pieces,
+          status_production,
+          real_meters,
+          total_meters,
+          difference_meters,
+        };
         console.log(result);
         setTotalTableData(result);
       })
@@ -71,7 +88,15 @@ export default function InsertionsTableDay() {
           tableLoading={tableLoading}
           changeTableData={changeTableData}
         ></TableInsertionsHours>
-        <TableDayTotal data={totalTableData} />
+        <TableDayTotal
+          total_pieces={totalTableData.total_pieces}
+          real_pieces={totalTableData.real_pieces}
+          difference_pieces={totalTableData.difference_pieces}
+          total_meters={totalTableData.total_meters}
+          real_meters={totalTableData.real_meters}
+          difference_meters={totalTableData.difference_meters}
+          status_production={totalTableData.status_production}
+        />
       </Box>
     </Box>
   );

@@ -12,7 +12,6 @@ export default function MainPage() {
     const fetchInsertions = async () => {
       try {
         const response = await axios.get(normalEndpoint("api/insertions"));
-        console.log(response.data);
         setInsertions(response.data.data);
       } catch (error) {
         console.error("Error al obtener las inserciones:", error);

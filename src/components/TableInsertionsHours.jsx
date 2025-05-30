@@ -23,18 +23,42 @@ export default function TableInsertionsHours({
   let tableContent;
   if (tableLoading) {
     tableContent = (
-      <Box display="flex" justifyContent="center" mt={4}>
-        <CircularProgress />
-      </Box>
+      <TableRow>
+        <TableCell colSpan={7} align="center">
+          <Box display="flex" justifyContent="center" mt={4}>
+            <CircularProgress />
+          </Box>
+        </TableCell>
+      </TableRow>
     );
   } else if (data.length == 0) {
-    tableContent = <Typography>No hay datos</Typography>;
+    tableContent = (
+      <TableRow>
+        <TableCell colSpan={7} align="center">
+          <Box display="flex" justifyContent="center" mt={4}>
+            <Typography variant="h5">No hay datos disponibles</Typography>
+          </Box>
+        </TableCell>
+      </TableRow>
+    );
   } else if (data && !tableLoading) {
     tableContent = data.map((row, index) => (
       <TableRow key={index}>
         <TableCell>{row.range}</TableCell>
         <TableCell sx={{ textAlign: "center", fontWeight: 600 }}>
-          {row.count}
+          <Typography
+            variant="body1"
+            fontWeight={600}
+            color={
+              row.status === "positive"
+                ? "success.main"
+                : row.status === "negative"
+                ? "error.main"
+                : undefined
+            }
+          >
+            {row.count}
+          </Typography>
         </TableCell>
         <TableCell>{row.meters_per_hour}</TableCell>
         <TableCell>

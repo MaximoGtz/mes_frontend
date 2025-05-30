@@ -6,6 +6,7 @@ import {
   TextField,
   Typography,
   CircularProgress,
+  Paper,
 } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import { normalEndpoint } from "../api/endpoints";
@@ -30,6 +31,7 @@ const validationSchema = Yup.object().shape({
 const TableInsertionsHoursForm = ({ fetchTableData }) => {
   const [profilers, setProfilers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     axios
@@ -41,6 +43,7 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
       .catch((err) => {
         console.error("Error al obtener perfiladoras:", err);
         setLoading(false);
+        setError(true);
       });
   }, []);
 
@@ -51,7 +54,21 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
       </Box>
     );
   }
-
+  if (error) {
+    return (
+      <Paper
+        sx={{
+          backgroundColor: "error.main",
+          margin: "30px 0px ",
+          padding: "40px",
+        }}
+      >
+        <Typography textAlign={"center"} variant="h3">
+          Lo sentimos, algo salió mal :/
+        </Typography>
+      </Paper>
+    );
+  }
   return (
     <Box mx="auto" margin={"0 auto"} padding={"20px 0px"}>
       <Typography variant="h4" gutterBottom>
