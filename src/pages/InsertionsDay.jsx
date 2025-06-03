@@ -9,18 +9,21 @@ export default function InsertionsTableDay() {
   const [tableLoading, setTableLoading] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [totalTableData, setTotalTableData] = useState([]);
+  const [goalPieces, setGoalPieces] = useState(undefined);
   const changeTableData = (index, minutesWorked) => {
     let death_time = Math.abs(minutesWorked - 60);
     const newTableData = [...tableData];
     newTableData[index] = { ...newTableData[index], death_time };
     setTableData(newTableData);
   };
-  const fetchTableData = async ({
-    profiler_id,
-    day,
-    piece_length,
-    pieces_per_hour,
-  }) => {
+  const fetchTableData = async ({ profiler_id, day, piece_length }) => {
+    let milimeters = 970;
+    let pieces_hour_goal = 350;
+
+    let operation_result = (piece_length * pieces_hour_goal) / milimeters;
+    let pieces_per_hour = operation_result.toFixed(2);
+    setGoalPieces(pieces_per_hour);
+    console.log(operation_result);
     setTableLoading(true);
     await axios
       .get(normalEndpoint("api/insertions/table/show"), {
@@ -83,6 +86,13 @@ export default function InsertionsTableDay() {
         <TableInsertionsHoursForm
           fetchTableData={fetchTableData}
         ></TableInsertionsHoursForm>
+        <Typography variant="h5">
+          Meta de piezas por hora:{" "}
+          <span style={{ fontWeight: 600, color: "#0288d1" }}>
+            {goalPieces}
+          </span>{" "}
+          pzs.
+        </Typography>
         <TableInsertionsHours
           data={tableData}
           tableLoading={tableLoading}

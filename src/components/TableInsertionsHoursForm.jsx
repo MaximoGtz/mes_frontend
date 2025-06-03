@@ -16,11 +16,6 @@ import Grid from "@mui/material/Grid";
 const validationSchema = Yup.object().shape({
   profiler_id: Yup.number().required("Selecciona una perfiladora"),
   day: Yup.string().required("Elige un día"),
-  pieces_per_hour: Yup.number()
-    .typeError("Debe ser un número")
-    .integer("Debe ser un número entero")
-    .positive("Debe ser mayor a 0")
-    .required("Campo requerido"),
   operator_name: Yup.string().required("Nombre del operador requerido"),
   piece_length: Yup.number()
     .typeError("Debe ser un número")
@@ -78,7 +73,6 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
         initialValues={{
           profiler_id: "",
           day: "",
-          pieces_per_hour: "",
           operator_name: "",
           piece_length: "",
         }}
@@ -130,22 +124,6 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
               <Grid size={6}>
                 <TextField
                   fullWidth
-                  name="pieces_per_hour"
-                  label="Piezas por deseadas (por hora)"
-                  value={values.pieces_per_hour}
-                  onChange={handleChange}
-                  error={
-                    touched.pieces_per_hour && Boolean(errors.pieces_per_hour)
-                  }
-                  helperText={touched.pieces_per_hour && errors.pieces_per_hour}
-                  margin="normal"
-                  color="warning"
-                  autoComplete="off"
-                />
-              </Grid>
-              <Grid size={6}>
-                <TextField
-                  fullWidth
                   name="operator_name"
                   label="Nombre del operador"
                   value={values.operator_name}
@@ -176,6 +154,7 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
                 textAlign={"center"}
                 alignContent={"center"}
                 alignItems={"center"}
+                sx={{ margin: "0 auto" }}
               >
                 <Button
                   type="submit"
