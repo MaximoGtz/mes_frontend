@@ -106,7 +106,9 @@ export default function TableInsertionsHours({
               <TableCell style={{ color: "white" }}>Piezas por hora</TableCell>
               <TableCell style={{ color: "white" }}>Metros por hora</TableCell>
               <TableCell style={{ color: "white" }}>Tiempo efectivo</TableCell>
-              <TableCell style={{ color: "white" }}>Tiempo muerto</TableCell>
+              <TableCell style={{ color: "white" }}>
+                Tiempo muerto (estimacion)
+              </TableCell>
               <TableCell style={{ color: "white" }}>Causa del paro</TableCell>
               <TableCell style={{ color: "white" }}>Acción</TableCell>
             </TableRow>

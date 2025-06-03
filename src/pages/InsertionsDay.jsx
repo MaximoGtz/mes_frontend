@@ -86,7 +86,7 @@ export default function InsertionsTableDay() {
         <TableInsertionsHoursForm
           fetchTableData={fetchTableData}
         ></TableInsertionsHoursForm>
-        <Typography variant="h5">
+        <Typography variant="h5" sx={{ padding: "10px" }}>
           Meta de piezas por hora:{" "}
           <span style={{ fontWeight: 600, color: "#0288d1" }}>
             {goalPieces}
