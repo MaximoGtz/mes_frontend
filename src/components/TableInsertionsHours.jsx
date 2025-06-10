@@ -1,5 +1,3 @@
-import React from "react";
-import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -13,37 +11,60 @@ import {
   CircularProgress,
   Typography,
   Button,
+  ListItem,
+  Divider,
+  Grid,
 } from "@mui/material";
 
-export default function TableInsertionsHours({
-  data,
-  tableLoading,
-  changeTableData,
-}) {
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Collapse from "@mui/material/Collapse";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import StarBorder from "@mui/icons-material/StarBorder";
+import RestoreIcon from "@mui/icons-material/Restore";
+import SendIcon from "@mui/icons-material/Send";
+import { useEffect, useState } from "react";
+
+export default function TableInsertionsHours({ data, tableLoading }) {
   let tableContent;
+  const [forms, setForms] = useState([]);
+  const handleOpenForm = (index) => {
+    setForms((prevForms) =>
+      prevForms.map((item, i) => (i === index ? !item : item))
+    );
+  };
+  useEffect(() => {
+    if (Array.isArray(data)) {
+      setForms(data.map(() => false));
+    }
+  }, [data]);
   if (tableLoading) {
     tableContent = (
       <TableRow>
-        <TableCell colSpan={7} align="center">
+        <TableCell colSpan={5} align="center">
           <Box display="flex" justifyContent="center" mt={4}>
             <CircularProgress />
           </Box>
         </TableCell>
       </TableRow>
     );
-  } else if (data.length == 0) {
+  } else if (!data || data.length === 0) {
     tableContent = (
       <TableRow>
-        <TableCell colSpan={7} align="center">
+        <TableCell colSpan={5} align="center">
           <Box display="flex" justifyContent="center" mt={4}>
             <Typography variant="h5">No hay datos disponibles</Typography>
           </Box>
         </TableCell>
       </TableRow>
     );
-  } else if (data && !tableLoading) {
-    tableContent = data.map((row, index) => (
-      <TableRow key={index}>
+  } else {
+    tableContent = data.flatMap((row, index) => [
+      <TableRow key={`row-${index}`}>
         <TableCell>{row.range}</TableCell>
         <TableCell sx={{ textAlign: "center", fontWeight: 600 }}>
           <Typography
@@ -62,39 +83,94 @@ export default function TableInsertionsHours({
         </TableCell>
         <TableCell>{row.meters_per_hour}</TableCell>
         <TableCell>
-          <TextField
-            label="Minutos"
-            fullWidth
-            color="warning"
-            autoComplete="off"
-            onChange={(event) => changeTableData(index, event.target.value)}
-          ></TextField>
+          <Typography>
+            {row.death_time >= 60
+              ? `Tiempo completado`
+              : `${row.death_time} minutos`}
+          </Typography>
         </TableCell>
         <TableCell>
-          <TextField
-            fullWidth
-            disabled
-            autoComplete="off"
-            value={row.death_time ? `${row.death_time} minutos` : `0 minutos`}
-            color="warning"
-          ></TextField>
+          <ListItemButton onClick={() => handleOpenForm(index)}>
+            <ListItemIcon>
+              <RestoreIcon fontSize="large" color="warning" />
+            </ListItemIcon>
+            <ListItemText primary="Justificaciones" />
+            {forms?.[index] ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
         </TableCell>
-        <TableCell>
-          <TextField
-            label="Escribe tus razónes"
-            fullWidth
-            multiline
-            autoComplete="off"
-            color="warning"
-          ></TextField>
+      </TableRow>,
+
+      <TableRow key={`collapse-${index}`}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
+          <Collapse in={forms?.[index] ?? false} timeout="auto" unmountOnExit>
+            {row.justifications.map((jrow, jindex) => (
+              <>
+                <Typography variant="body1">
+                  Justificación: {jindex + 1}
+                </Typography>
+                <Grid container spacing={2}>
+                  <Grid size={6}>
+                    <Typography variant="body1">
+                      <span style={{ fontWeight: 600 }}>Trabajador: </span>
+                      {jrow.worker}
+                    </Typography>
+                  </Grid>
+                  <Grid size={6}>
+                    <Typography variant="body1">
+                      <span style={{ fontWeight: 600 }}>Minutos fuera: </span>
+                      {jrow.minutes_off}
+                    </Typography>
+                  </Grid>
+                  <Grid size={12}>
+                    <Typography variant="body1"><span style={{ fontWeight: 600 }}>Justificacion: </span>{jrow.justification}</Typography>
+                    
+                    </Grid>
+                </Grid>
+              </>
+            ))}
+            <Box>
+              <Typography variant="h5">
+
+              Minutos por justificar:{" "}
+              {row.death_time >= 60 ? "0" : `${Math.abs(row.death_time - 60)}`}
+              </Typography>
+            </Box>
+            <Box margin={1}>
+              <form>
+                <List component="div" disablePadding>
+                  <ListItem>
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      label="Minutos"
+                      color="info.dark"
+                      placeholder="30"
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      label="Justificación"
+                      color="info.dark"
+                      placeholder="Aquí tu justificación"
+                      multiline
+                      rows={3}
+                    />
+                  </ListItem>
+                  <ListItemButton sx={{ pl: 4 }}>
+                    <ListItemIcon>
+                      <SendIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Enviar" />
+                  </ListItemButton>
+                </List>
+              </form>
+            </Box>
+          </Collapse>
         </TableCell>
-        <TableCell>
-          <Button variant="contained" fullWidth color="warning">
-            Guardar
-          </Button>
-        </TableCell>
-      </TableRow>
-    ));
+      </TableRow>,
+    ]);
   }
   return (
     <Box margin={"0 auto"}>
@@ -105,11 +181,9 @@ export default function TableInsertionsHours({
               <TableCell style={{ color: "white" }}>Hora</TableCell>
               <TableCell style={{ color: "white" }}>Piezas por hora</TableCell>
               <TableCell style={{ color: "white" }}>Metros por hora</TableCell>
-              <TableCell style={{ color: "white" }}>Tiempo efectivo</TableCell>
               <TableCell style={{ color: "white" }}>
                 Tiempo muerto (estimacion)
               </TableCell>
-              <TableCell style={{ color: "white" }}>Causa del paro</TableCell>
               <TableCell style={{ color: "white" }}>Acción</TableCell>
             </TableRow>
           </TableHead>
