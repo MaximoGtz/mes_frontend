@@ -17,13 +17,10 @@ export default function InsertionsTableDay() {
     setTableData(newTableData);
   };
   const fetchTableData = async ({ profiler_id, day, piece_length }) => {
-    let milimeters = 970;
-    let pieces_hour_goal = 350;
-
-    let operation_result = (piece_length * pieces_hour_goal) / milimeters;
-    let pieces_per_hour = operation_result.toFixed(2);
-    setGoalPieces(pieces_per_hour);
-    console.log(operation_result);
+    let milimeters_per_hour = 970 * 350;
+    let corrected_result = milimeters_per_hour / piece_length;
+    let pieces_per_hour = corrected_result.toFixed(2);
+    setGoalPieces(corrected_result);
     setTableLoading(true);
     await axios
       .get(normalEndpoint("api/insertions/table/show"), {
@@ -32,13 +29,13 @@ export default function InsertionsTableDay() {
           date: day,
         },
       })
-      .then((response) => {
+      .then((response) => { 
         const nuevaData = response.data.map((datos) => ({
           ...datos,
           meters_per_hour: ((piece_length / 1000) * datos.count).toFixed(2),
           status: datos.count >= pieces_per_hour ? "positive" : "negative",
-        }));
-        console.log(nuevaData);
+          death_time : Math.ceil((datos.count * 60) / pieces_per_hour),
+        }));  
         setTableData(nuevaData);
         setTableLoading(false);
         const real_pieces = nuevaData.reduce(
@@ -65,7 +62,7 @@ export default function InsertionsTableDay() {
           total_meters,
           difference_meters,
         };
-        console.log(result);
+        // console.log(result);
         setTotalTableData(result);
       })
       .catch((error) => {
