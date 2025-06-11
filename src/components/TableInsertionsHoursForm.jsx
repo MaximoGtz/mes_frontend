@@ -7,6 +7,8 @@ import {
   Typography,
   CircularProgress,
   Paper,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { Formik, Form, Field } from "formik";
 import { normalEndpoint } from "../api/endpoints";
@@ -27,7 +29,9 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
   const [profilers, setProfilers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const theme = useTheme();
 
+  const isLgUp = useMediaQuery(theme.breakpoints.up("lg")); // >= 1200px
   useEffect(() => {
     axios
       .get(normalEndpoint("api/profilers"))
@@ -58,7 +62,7 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
           padding: "40px",
         }}
       >
-        <Typography textAlign={"center"} variant="h3">
+        <Typography textAlign={"center"} variant={isLgUp ? "h3" : "body1"}>
           Lo sentimos, algo salió mal :/
         </Typography>
       </Paper>
@@ -86,7 +90,7 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
         {({ errors, touched, handleChange, values }) => (
           <Form>
             <Grid container spacing={2}>
-              <Grid size={6}>
+              <Grid size={isLgUp ? 6 : 12}>
                 <TextField
                   select
                   fullWidth
@@ -107,7 +111,7 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
                   ))}
                 </TextField>
               </Grid>
-              <Grid size={6}>
+              <Grid size={isLgUp ? 6 : 12}>
                 <TextField
                   fullWidth
                   name="day"
@@ -123,7 +127,7 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
                   autoComplete="off"
                 />
               </Grid>
-              <Grid size={6}>
+              <Grid size={isLgUp ? 6 : 12}>
                 <TextField
                   fullWidth
                   name="operator_name"
@@ -137,7 +141,7 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
                   autoComplete="off"
                 />
               </Grid>
-              <Grid size={6}>
+              <Grid size={isLgUp ? 6 : 12}>
                 <TextField
                   fullWidth
                   name="piece_length"
@@ -152,7 +156,7 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
                 />
               </Grid>
               <Grid
-                size={6}
+                size={isLgUp ? 6 : 12}
                 textAlign={"center"}
                 alignContent={"center"}
                 alignItems={"center"}
