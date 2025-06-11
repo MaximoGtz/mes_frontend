@@ -11,19 +11,33 @@ export default function InsertionsTableDay() {
   const [totalTableData, setTotalTableData] = useState([]);
   const [goalPieces, setGoalPieces] = useState(undefined);
   const [dataJustification, setDataJustification] = useState({});
-  // const changeTableData = (index, minutesWorked) => {
-  //   let worked_time = Math.abs(minutesWorked - 60);
-  //   console.log("Justificaciones: ",tableData)
-  //   const newTableData = [...tableData];
-  //   newTableData[index] = { ...newTableData[index], worked_time };
-  //   setTableData(newTableData);
-  // };
-  const fetchTableData = async ({ profiler_id, day, piece_length, operator_name }) => {
+  const [savedFormData, setSavedFormData] = useState({});
+
+  const fetchTableData = async ({
+    profiler_id,
+    day,
+    piece_length,
+    operator_name,
+    useSavedData
+  }) => {
+    if(useSavedData == true){
+      profiler_id = savedFormData.profiler_id,
+      day = savedFormData.day,
+      piece_length = savedFormData.piece_length,
+      operator_name = savedFormData.profiler_id
+    }else{
+      setSavedFormData({
+        profiler_id : profiler_id,
+        day : day,
+        piece_length:piece_length,
+        operator_name :operator_name,
+      })
+    }
     const formDataObject = {
       day,
       profiler_id,
-      worker : operator_name,
-    }
+      worker: operator_name,
+    };
     setDataJustification(formDataObject);
 
     let milimeters_per_hour = 970 * 350;
@@ -31,6 +45,7 @@ export default function InsertionsTableDay() {
     let pieces_per_hour = corrected_result.toFixed(2);
     setGoalPieces(corrected_result);
     setTableLoading(true);
+    
     await axios
       .get(normalEndpoint("api/insertions/table/show"), {
         params: {
@@ -44,20 +59,20 @@ export default function InsertionsTableDay() {
           meters_per_hour: ((piece_length / 1000) * datos.count).toFixed(2),
           status: datos.count >= pieces_per_hour ? "positive" : "negative",
           worked_time: Math.ceil((datos.count * 60) / pieces_per_hour),
-          justified_minutes : 0,
-          total_minutes: Math.ceil((datos.count * 60) / pieces_per_hour)
+          justified_minutes: 0,
+          total_minutes: Math.ceil((datos.count * 60) / pieces_per_hour),
         }));
-        data.map((data, index) => {
+        data.map((data) => {
           let sum = 0;
           if (data.justifications.length > 0) {
             data.justifications.forEach((element) => {
               sum += element.minutes_off;
             });
             data.total_minutes += sum;
-            data.justified_minutes += sum
+            data.justified_minutes += sum;
           }
         });
-        console.log(data)
+        console.log(data);
         setTableData(data);
         setTableLoading(false);
         const real_pieces = data.reduce((acc, item) => acc + item.count, 0);
@@ -113,7 +128,8 @@ export default function InsertionsTableDay() {
           data={tableData}
           tableLoading={tableLoading}
           dataJustification={dataJustification}
-          
+          fetchTableData={fetchTableData}
+          savedFormData={savedFormData}
         ></TableInsertionsHours>
         <TableDayTotal
           total_pieces={totalTableData.total_pieces}
