@@ -29,7 +29,14 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import SendIcon from "@mui/icons-material/Send";
 import { useEffect, useState } from "react";
 
-export default function TableInsertionsHours({ data, tableLoading }) {
+import AddJustificationsForm from "./AddJustificationsForm";
+export default function TableInsertionsHours({
+  data,
+  tableLoading,
+  dataJustification,
+  fetchTableData,
+  savedFormData,
+}) {
   let tableContent;
   const [forms, setForms] = useState([]);
   const handleOpenForm = (index) => {
@@ -84,9 +91,9 @@ export default function TableInsertionsHours({ data, tableLoading }) {
         <TableCell>{row.meters_per_hour}</TableCell>
         <TableCell>
           <Typography>
-            {row.death_time >= 60
+            {row.worked_time >= 60
               ? `Tiempo completado`
-              : `${row.death_time} minutos`}
+              : `${row.worked_time} minutos`}
           </Typography>
         </TableCell>
         <TableCell>
@@ -105,67 +112,69 @@ export default function TableInsertionsHours({ data, tableLoading }) {
           <Collapse in={forms?.[index] ?? false} timeout="auto" unmountOnExit>
             {row.justifications.map((jrow, jindex) => (
               <>
-                <Typography variant="body1">
-                  Justificación: {jindex + 1}
-                </Typography>
-                <Grid container spacing={2}>
+                <Grid container spacing={2} sx={{ border: "1px solid white" }}>
+                  <Grid size={12}>
+                    <Typography
+                      variant="h5"
+                      textAlign={"center"}
+                      padding={"10px"}
+                      padding={"10px"}
+                    >
+                      Justificación {jindex + 1}
+                    </Typography>
+                  </Grid>
                   <Grid size={6}>
-                    <Typography variant="body1">
+                    <Typography variant="body1" padding={"10px"}>
                       <span style={{ fontWeight: 600 }}>Trabajador: </span>
                       {jrow.worker}
                     </Typography>
                   </Grid>
                   <Grid size={6}>
-                    <Typography variant="body1">
+                    <Typography variant="body1" padding={"10px"}>
                       <span style={{ fontWeight: 600 }}>Minutos fuera: </span>
                       {jrow.minutes_off}
                     </Typography>
                   </Grid>
                   <Grid size={12}>
-                    <Typography variant="body1"><span style={{ fontWeight: 600 }}>Justificacion: </span>{jrow.justification}</Typography>
-                    
-                    </Grid>
+                    <Typography variant="body1" padding={"10px"}>
+                      <span style={{ fontWeight: 600 }}>Justificacion: </span>
+                      {jrow.justification}
+                    </Typography>
+                  </Grid>
                 </Grid>
               </>
             ))}
-            <Box>
-              <Typography variant="h5">
-
-              Minutos por justificar:{" "}
-              {row.death_time >= 60 ? "0" : `${Math.abs(row.death_time - 60)}`}
-              </Typography>
+            <Box display={"flex"} justifyContent={"space-between"}>
+              <Box padding={"20px"}>
+                <Typography variant="h5">
+                  Minutos justificados:{" "}
+                  <span style={{ fontWeight: 600 , color:"#0288d1" }}>
+                    {row.justified_minutes}
+                  </span>
+                </Typography>
+              </Box>
+              <Box padding={"20px"}>
+                <Typography variant="h5">
+                  Minutos por justificar:{" "}
+                  <span style={{ fontWeight: 600, color:'#f9a825' }}>
+                    {row.total_minutes >= 60
+                      ? "0"
+                      : `${
+                          Math.abs(row.worked_time - 60) - row.justified_minutes
+                        }`}
+                  </span>
+                </Typography>
+              </Box>
             </Box>
             <Box margin={1}>
-              <form>
-                <List component="div" disablePadding>
-                  <ListItem>
-                    <TextField
-                      variant="outlined"
-                      fullWidth
-                      label="Minutos"
-                      color="info.dark"
-                      placeholder="30"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <TextField
-                      variant="outlined"
-                      fullWidth
-                      label="Justificación"
-                      color="info.dark"
-                      placeholder="Aquí tu justificación"
-                      multiline
-                      rows={3}
-                    />
-                  </ListItem>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemIcon>
-                      <SendIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Enviar" />
-                  </ListItemButton>
-                </List>
-              </form>
+              <AddJustificationsForm
+                key={index}
+                dataJustification={dataJustification}
+                hour={row.range}
+                total_minutes={row.total_minutes}
+                fetchTableData={fetchTableData}
+                savedFormData={savedFormData}
+              />
             </Box>
           </Collapse>
         </TableCell>
@@ -182,7 +191,7 @@ export default function TableInsertionsHours({ data, tableLoading }) {
               <TableCell style={{ color: "white" }}>Piezas por hora</TableCell>
               <TableCell style={{ color: "white" }}>Metros por hora</TableCell>
               <TableCell style={{ color: "white" }}>
-                Tiempo muerto (estimacion)
+                Tiempo trabajado (estimacion)
               </TableCell>
               <TableCell style={{ color: "white" }}>Acción</TableCell>
             </TableRow>

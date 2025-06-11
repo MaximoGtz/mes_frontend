@@ -10,18 +10,42 @@ export default function InsertionsTableDay() {
   const [tableData, setTableData] = useState([]);
   const [totalTableData, setTotalTableData] = useState([]);
   const [goalPieces, setGoalPieces] = useState(undefined);
-  const changeTableData = (index, minutesWorked) => {
-    let death_time = Math.abs(minutesWorked - 60);
-    const newTableData = [...tableData];
-    newTableData[index] = { ...newTableData[index], death_time };
-    setTableData(newTableData);
-  };
-  const fetchTableData = async ({ profiler_id, day, piece_length }) => {
+  const [dataJustification, setDataJustification] = useState({});
+  const [savedFormData, setSavedFormData] = useState({});
+
+  const fetchTableData = async ({
+    profiler_id,
+    day,
+    piece_length,
+    operator_name,
+    useSavedData
+  }) => {
+    if(useSavedData == true){
+      profiler_id = savedFormData.profiler_id,
+      day = savedFormData.day,
+      piece_length = savedFormData.piece_length,
+      operator_name = savedFormData.profiler_id
+    }else{
+      setSavedFormData({
+        profiler_id : profiler_id,
+        day : day,
+        piece_length:piece_length,
+        operator_name :operator_name,
+      })
+    }
+    const formDataObject = {
+      day,
+      profiler_id,
+      worker: operator_name,
+    };
+    setDataJustification(formDataObject);
+
     let milimeters_per_hour = 970 * 350;
     let corrected_result = milimeters_per_hour / piece_length;
     let pieces_per_hour = corrected_result.toFixed(2);
     setGoalPieces(corrected_result);
     setTableLoading(true);
+    
     await axios
       .get(normalEndpoint("api/insertions/table/show"), {
         params: {
@@ -29,19 +53,29 @@ export default function InsertionsTableDay() {
           date: day,
         },
       })
-      .then((response) => { 
-        const nuevaData = response.data.map((datos) => ({
+      .then((response) => {
+        const data = response.data.map((datos) => ({
           ...datos,
           meters_per_hour: ((piece_length / 1000) * datos.count).toFixed(2),
           status: datos.count >= pieces_per_hour ? "positive" : "negative",
-          death_time : Math.ceil((datos.count * 60) / pieces_per_hour),
-        }));  
-        setTableData(nuevaData);
+          worked_time: Math.ceil((datos.count * 60) / pieces_per_hour),
+          justified_minutes: 0,
+          total_minutes: Math.ceil((datos.count * 60) / pieces_per_hour),
+        }));
+        data.map((data) => {
+          let sum = 0;
+          if (data.justifications.length > 0) {
+            data.justifications.forEach((element) => {
+              sum += element.minutes_off;
+            });
+            data.total_minutes += sum;
+            data.justified_minutes += sum;
+          }
+        });
+        console.log(data);
+        setTableData(data);
         setTableLoading(false);
-        const real_pieces = nuevaData.reduce(
-          (acc, item) => acc + item.count,
-          0
-        );
+        const real_pieces = data.reduce((acc, item) => acc + item.count, 0);
         const total_pieces = pieces_per_hour * 12;
         const difference_pieces = real_pieces - total_pieces;
         let status_production;
@@ -93,7 +127,9 @@ export default function InsertionsTableDay() {
         <TableInsertionsHours
           data={tableData}
           tableLoading={tableLoading}
-          changeTableData={changeTableData}
+          dataJustification={dataJustification}
+          fetchTableData={fetchTableData}
+          savedFormData={savedFormData}
         ></TableInsertionsHours>
         <TableDayTotal
           total_pieces={totalTableData.total_pieces}
