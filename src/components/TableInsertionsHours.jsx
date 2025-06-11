@@ -29,7 +29,8 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import SendIcon from "@mui/icons-material/Send";
 import { useEffect, useState } from "react";
 
-export default function TableInsertionsHours({ data, tableLoading }) {
+import AddJustificationsForm from "./AddJustificationsForm";
+export default function TableInsertionsHours({ data, tableLoading, dataJustification }) {
   let tableContent;
   const [forms, setForms] = useState([]);
   const handleOpenForm = (index) => {
@@ -84,9 +85,9 @@ export default function TableInsertionsHours({ data, tableLoading }) {
         <TableCell>{row.meters_per_hour}</TableCell>
         <TableCell>
           <Typography>
-            {row.death_time >= 60
+            {row.worked_time >= 60
               ? `Tiempo completado`
-              : `${row.death_time} minutos`}
+              : `${row.worked_time} minutos`}
           </Typography>
         </TableCell>
         <TableCell>
@@ -132,40 +133,11 @@ export default function TableInsertionsHours({ data, tableLoading }) {
               <Typography variant="h5">
 
               Minutos por justificar:{" "}
-              {row.death_time >= 60 ? "0" : `${Math.abs(row.death_time - 60)}`}
+              {row.worked_time >= 60 ? "0" : `${Math.abs(row.worked_time - 60) - row.justified_minutes}`}
               </Typography>
             </Box>
             <Box margin={1}>
-              <form>
-                <List component="div" disablePadding>
-                  <ListItem>
-                    <TextField
-                      variant="outlined"
-                      fullWidth
-                      label="Minutos"
-                      color="info.dark"
-                      placeholder="30"
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <TextField
-                      variant="outlined"
-                      fullWidth
-                      label="Justificación"
-                      color="info.dark"
-                      placeholder="Aquí tu justificación"
-                      multiline
-                      rows={3}
-                    />
-                  </ListItem>
-                  <ListItemButton sx={{ pl: 4 }}>
-                    <ListItemIcon>
-                      <SendIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Enviar" />
-                  </ListItemButton>
-                </List>
-              </form>
+              <AddJustificationsForm key={index} dataJustification={dataJustification} hour={row.range}/>
             </Box>
           </Collapse>
         </TableCell>
@@ -182,7 +154,7 @@ export default function TableInsertionsHours({ data, tableLoading }) {
               <TableCell style={{ color: "white" }}>Piezas por hora</TableCell>
               <TableCell style={{ color: "white" }}>Metros por hora</TableCell>
               <TableCell style={{ color: "white" }}>
-                Tiempo muerto (estimacion)
+                Tiempo trabajado (estimacion)
               </TableCell>
               <TableCell style={{ color: "white" }}>Acción</TableCell>
             </TableRow>
