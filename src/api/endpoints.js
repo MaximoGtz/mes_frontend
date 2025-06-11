@@ -3,5 +3,5 @@ export function normalEndpoint(concat) {
   const sharedLocalEndpoint = "http://192.168.200.49:8000/";
   const testEndpoint = "https://api.mes.ferredevs.com/";
 
-  return `${sharedLocalEndpoint}${concat}`;
+  return `${localEndpoint}${concat}`;
 }
