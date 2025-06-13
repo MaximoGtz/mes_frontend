@@ -97,6 +97,13 @@ export default function TableInsertionsHours({
           </Typography>
         </TableCell>
         <TableCell>
+          <Typography>
+            {row.worked_time >= 60
+              ? `0 minutos`
+              : `${Math.abs(row.worked_time - 60)} minutos`}
+          </Typography>
+        </TableCell>
+        <TableCell>
           <ListItemButton onClick={() => handleOpenForm(index)}>
             <ListItemIcon>
               <RestoreIcon fontSize="large" color="warning" />
@@ -108,7 +115,7 @@ export default function TableInsertionsHours({
       </TableRow>,
 
       <TableRow key={`collapse-${index}`}>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={forms?.[index] ?? false} timeout="auto" unmountOnExit>
             {row.justifications.map((jrow, jindex) => (
               <>
@@ -192,6 +199,9 @@ export default function TableInsertionsHours({
               <TableCell style={{ color: "white" }}>Metros por hora</TableCell>
               <TableCell style={{ color: "white" }}>
                 Tiempo trabajado (estimacion)
+              </TableCell>
+              <TableCell style={{ color: "white" }}>
+                Tiempo muerto
               </TableCell>
               <TableCell style={{ color: "white" }}>Acción</TableCell>
             </TableRow>
