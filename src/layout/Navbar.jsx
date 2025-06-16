@@ -73,7 +73,7 @@ export default function Navbar({ toggleDrawer, handleNavigate }) {
                 >
                   Datos del día
                 </Button>
-                <Button
+                {/* <Button
                   variant="contained"
                   fullWidth
                   sx={{ margin: "0px 10px" }}
@@ -82,7 +82,7 @@ export default function Navbar({ toggleDrawer, handleNavigate }) {
                   }}
                 >
                   Estadísticas
-                </Button>
+                </Button> */}
               </Box>
               <Box>
                 <Typography sx={{ marginLeft: "auto" }} textAlign={"center"}>

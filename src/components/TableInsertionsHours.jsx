@@ -107,7 +107,12 @@ export default function TableInsertionsHours({
           </Typography>
         </TableCell>
         <TableCell>
-          <Typography>
+          <Typography
+            color={
+              row.worked_time + row.justified_minutes >= 60 ?
+              "success" : "error"
+            }
+          >
             {row.worked_time >= 60
               ? `0 minutos`
               : `${Math.abs(row.worked_time - 60)} minutos`}

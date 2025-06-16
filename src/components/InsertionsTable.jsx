@@ -22,7 +22,7 @@ export default function InsertionsTable({ insertions }) {
             <TableCell align="right">Longitud del perfil</TableCell>
             <TableCell align="right">Distancia entre agujeros</TableCell>
             <TableCell align="right">Longitud antes del reinicio</TableCell>
-            <TableCell>Acciones</TableCell>
+            {/* <TableCell>Acciones</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -43,7 +43,7 @@ export default function InsertionsTable({ insertions }) {
               <TableCell align="right">
                 {insertion.length_before_reset}
               </TableCell>
-              <TableCell>
+              {/* <TableCell>
                 <Box display={"flex"} justifyContent={"space-between"}>
                   <Button variant="contained" color="success" margin={"10px"}>
                     Ver inserción
@@ -52,7 +52,7 @@ export default function InsertionsTable({ insertions }) {
                     Ver máquina
                   </Button>
                 </Box>
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
         </TableBody>

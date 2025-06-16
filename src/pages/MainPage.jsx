@@ -5,23 +5,6 @@ import InsertionsTable from "../components/InsertionsTable";
 import axios from "axios";
 import { normalEndpoint } from "../api/endpoints";
 export default function MainPage() {
-  const [insertions, setInsertions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    // Realizar la consulta a la API al cargar el componente
-    const fetchInsertions = async () => {
-      try {
-        const response = await axios.get(normalEndpoint("api/insertions"));
-        setInsertions(response.data.data);
-      } catch (error) {
-        console.error("Error al obtener las inserciones:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchInsertions();
-  }, []);
   return (
     <>
       <Box
@@ -61,30 +44,7 @@ export default function MainPage() {
           Bienvenido
         </Typography>
       </Box>
-      <Box sx={{ padding: 4 }}>
-        <Typography
-          variant="h3"
-          fontWeight={600}
-          textAlign={"center"}
-          marginBottom={"32px"}
-        >
-          Todas las inserciónes
-        </Typography>
-        {loading ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "300px",
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        ) : (
-          <InsertionsTable insertions={insertions} />
-        )}
-      </Box>
+      
     </>
   );
 }
