@@ -72,7 +72,7 @@ export default function InsertionsTableDay() {
             data.justified_minutes += sum;
           }
         });
-        console.log(data);
+        // console.log(data);
         setTableData(data);
         setTableLoading(false);
         const real_pieces = data.reduce((acc, item) => acc + item.count, 0);

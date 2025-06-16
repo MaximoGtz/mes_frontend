@@ -135,7 +135,6 @@ export default function TableInsertionsHours({
                       variant="h5"
                       textAlign={"center"}
                       padding={"10px"}
-                      padding={"10px"}
                     >
                       Justificación {jindex + 1}
                     </Typography>
@@ -209,7 +208,7 @@ export default function TableInsertionsHours({
               <TableCell style={{ color: "white" }}>Meta de piezas</TableCell>
               <TableCell style={{ color: "white" }}>Metros por hora</TableCell>
               <TableCell style={{ color: "white" }}>
-                Tiempo trabajado (estimacion)
+                Tiempo efectivo
               </TableCell>
               <TableCell style={{ color: "white" }}>Tiempo muerto</TableCell>
               <TableCell style={{ color: "white" }}>Acción</TableCell>

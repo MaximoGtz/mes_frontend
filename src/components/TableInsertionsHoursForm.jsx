@@ -83,7 +83,7 @@ const TableInsertionsHoursForm = ({ fetchTableData }) => {
         validationSchema={validationSchema}
         onSubmit={(values) => {
           values.useSavedData = false;
-          console.log(values)
+          // console.log(values)
           fetchTableData(values);
         }}
       >
