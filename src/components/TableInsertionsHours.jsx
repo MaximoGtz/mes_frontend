@@ -36,6 +36,7 @@ export default function TableInsertionsHours({
   dataJustification,
   fetchTableData,
   savedFormData,
+  goalPieces,
 }) {
   let tableContent;
   const [forms, setForms] = useState([]);
@@ -88,6 +89,15 @@ export default function TableInsertionsHours({
             {row.count}
           </Typography>
         </TableCell>
+        <TableCell sx={{ textAlign: "center", fontWeight: 600 }}>
+          <Typography
+            variant="body1"
+            fontWeight={600}
+            
+          >
+            {goalPieces}
+          </Typography>
+        </TableCell>
         <TableCell>{row.meters_per_hour}</TableCell>
         <TableCell>
           <Typography>
@@ -115,7 +125,7 @@ export default function TableInsertionsHours({
       </TableRow>,
 
       <TableRow key={`collapse-${index}`}>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
           <Collapse in={forms?.[index] ?? false} timeout="auto" unmountOnExit>
             {row.justifications.map((jrow, jindex) => (
               <>
@@ -155,7 +165,7 @@ export default function TableInsertionsHours({
               <Box padding={"20px"}>
                 <Typography variant="h5">
                   Minutos justificados:{" "}
-                  <span style={{ fontWeight: 600 , color:"#0288d1" }}>
+                  <span style={{ fontWeight: 600, color: "#0288d1" }}>
                     {row.justified_minutes}
                   </span>
                 </Typography>
@@ -163,7 +173,7 @@ export default function TableInsertionsHours({
               <Box padding={"20px"}>
                 <Typography variant="h5">
                   Minutos por justificar:{" "}
-                  <span style={{ fontWeight: 600, color:'#f9a825' }}>
+                  <span style={{ fontWeight: 600, color: "#f9a825" }}>
                     {row.total_minutes >= 60
                       ? "0"
                       : `${
@@ -196,13 +206,12 @@ export default function TableInsertionsHours({
             <TableRow>
               <TableCell style={{ color: "white" }}>Hora</TableCell>
               <TableCell style={{ color: "white" }}>Piezas por hora</TableCell>
+              <TableCell style={{ color: "white" }}>Meta de piezas</TableCell>
               <TableCell style={{ color: "white" }}>Metros por hora</TableCell>
               <TableCell style={{ color: "white" }}>
                 Tiempo trabajado (estimacion)
               </TableCell>
-              <TableCell style={{ color: "white" }}>
-                Tiempo muerto
-              </TableCell>
+              <TableCell style={{ color: "white" }}>Tiempo muerto</TableCell>
               <TableCell style={{ color: "white" }}>Acción</TableCell>
             </TableRow>
           </TableHead>

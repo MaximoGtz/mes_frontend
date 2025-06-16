@@ -130,6 +130,7 @@ export default function InsertionsTableDay() {
           dataJustification={dataJustification}
           fetchTableData={fetchTableData}
           savedFormData={savedFormData}
+          goalPieces={goalPieces}
         ></TableInsertionsHours>
         <TableDayTotal
           total_pieces={totalTableData.total_pieces}
